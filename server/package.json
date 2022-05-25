@@ -1,0 +1,31 @@
+{
+  "name": "memories-app-server",
+  "version": "1.0.0",
+  "engines": {
+    "node": "16.13.1",
+    "npm": "8.3.1"
+  },
+  "scripts": {
+    "client": "cd ../client && yarn start",
+    "server": "nodemon server.js",
+    "build": "cd client && npm run build",
+    "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\"",
+    "start": "node server.js",
+    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.1",
+    "mongoose": "^6.3.4"
+  },
+  "devDependencies": {
+    "concurrently": "^7.2.1",
+    "nodemon": "^1.19.1"
+  },
+  "description": "express based backend server",
+  "main": "index.js",
+  "type": "module",
+  "author": "Mert Buyulu",
+  "license": "MIT"
+}
