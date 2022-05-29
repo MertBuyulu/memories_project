@@ -1,24 +1,7 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
-import * as api from "../../api/utils";
-
-export const getPosts = createAsyncThunk("posts/getPosts", async () => {
-  try {
-    const response = await api.fetchPosts();
-    return response.data;
-  } catch (error) {
-    return error.message;
-  }
-});
-
-export const createPost = createAsyncThunk("posts/createPost", async (post) => {
-  try {
-    const response = await api.createPost(post);
-    return response.data;
-  } catch (error) {
-    return error.message;
-  }
-});
+// reducer functions
+import { getPosts, createPost, updatePost } from "./post.utils";
 
 const INITIAL_STATE = { posts: [], status: "idle", error: null };
 
@@ -50,14 +33,31 @@ const postsSlice = createSlice({
       .addCase(createPost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
+      })
+      .addCase(updatePost.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(updatePost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.posts.map((post) =>
+          post._id === action.payload._id ? action.payload : post
+        );
+      })
+      .addCase(updatePost.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
       });
   },
 });
 
 // selectors
-export const selectPosts = (state) => state.posts;
-export const selectPostsStatus = (state) => state.isLoading;
-export const selectPostsError = (state) => state.error;
+export const selectPosts = (state) => state.posts.posts;
+export const selectPostsStatus = (state) => state.posts.isLoading;
+export const selectPostsError = (state) => state.posts.error;
 
-export const { create } = postsSlice.actions;
+// retrieve the state of a specific post
+export const selectPostById = (state, id) => {
+  return id ? state.posts.posts.find((post) => post._id === id) : null;
+};
+
 export default postsSlice.reducer;

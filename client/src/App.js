@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 // hooks
 import { useEffect } from "react";
 // pre-built style components
@@ -10,19 +10,21 @@ import Posts from "./components/Posts/posts";
 import memories from "./assets/memories.png";
 // styles
 import useStyles from "./app.styles";
-// redux
-import { useSelector, useDispatch } from "react-redux";
+
+import { useDispatch } from "react-redux";
 // redux actions
-import { getPosts, selectPosts } from "./redux/posts";
+import { getPosts } from "./redux/posts/post.utils";
 
 const App = () => {
+  const [currentId, setCurrentId] = useState(null);
+
   const classes = useStyles();
   const dispatch = useDispatch();
-  const posts = useSelector(selectPosts);
 
   useEffect(() => {
     dispatch(getPosts());
-  }, [dispatch]);
+  }, [currentId, dispatch]);
+
   return (
     <Container maxwidth="lg">
       <AppBar className={classes.appBar} position="static" color="inherit">
@@ -40,10 +42,10 @@ const App = () => {
             spacing={3}
           >
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <Posts setCurrentId={setCurrentId} />
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form />
+              <Form currentId={currentId} setCurrentId={setCurrentId} />
             </Grid>
           </Grid>
         </Container>
