@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const postScheme = mongoose.Schema({
+const postSchema = mongoose.Schema({
   title: String,
   message: String,
   creator: String,
@@ -16,6 +16,6 @@ const postScheme = mongoose.Schema({
   },
 });
 
-const PostMessage = mongoose.model("PostMessage", postScheme);
+const PostMessage = mongoose.model("PostMessage", postSchema);
 
 export default PostMessage;

@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { startTransition } from "react";
 
 import * as api from "../../api/utils";
 
@@ -12,26 +11,44 @@ export const getPosts = createAsyncThunk("posts/getPosts", async () => {
   }
 });
 
-const INITIAL_STATE = { posts: [], isLoading: false, error: null };
+export const createPost = createAsyncThunk("posts/createPost", async (post) => {
+  try {
+    const response = await api.createPost(post);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+});
+
+const INITIAL_STATE = { posts: [], status: "idle", error: null };
 
 const postsSlice = createSlice({
   name: "posts",
   initialState: INITIAL_STATE,
-  reducers: {
-    create(state, action) {},
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getPosts.pending, (state) => {
-        state.isLoading = true;
+        state.status = "pending";
       })
       .addCase(getPosts.fulfilled, (state, action) => {
-        state.isLoading = false;
+        state.status = "succeeded";
         // update posts
-        state.posts = action.payLoad;
+        state.posts = action.payload;
       })
       .addCase(getPosts.rejected, (state, action) => {
-        state.isLoading = false;
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(createPost.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(createPost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.posts = [...state.posts, action.payload];
+      })
+      .addCase(createPost.rejected, (state, action) => {
+        state.status = "failed";
         state.error = action.error.message;
       });
   },
