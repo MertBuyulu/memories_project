@@ -22,6 +22,7 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const post = useSelector((state) => selectPostById(state, currentId));
   const dispatch = useDispatch();
+  console.log(postData.tags);
 
   const classes = useStyles();
 
@@ -99,7 +100,12 @@ const Form = ({ currentId, setCurrentId }) => {
           label="tags"
           fullWidth
           value={postData.tags}
-          onChange={handleChange}
+          onChange={(event) =>
+            setPostData({
+              ...postData,
+              tags: event.target.value.split(","),
+            })
+          }
         />
         <div className={classes.fileInput}>
           <FileBase64

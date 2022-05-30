@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 // reducer functions
-import { getPosts, createPost, updatePost } from "./post.utils";
+import { getPosts, createPost, updatePost, deletePost } from "./post.utils";
 
 const INITIAL_STATE = { posts: [], status: "idle", error: null };
 
@@ -44,6 +44,18 @@ const postsSlice = createSlice({
         );
       })
       .addCase(updatePost.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(deletePost.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(deletePost.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.posts.filter((post) => post._id !== action.payload._id);
+        console.log(state.posts);
+      })
+      .addCase(deletePost.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
