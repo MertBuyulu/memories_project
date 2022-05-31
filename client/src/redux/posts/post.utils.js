@@ -35,6 +35,8 @@ export const updatePost = createAsyncThunk(
 export const deletePost = createAsyncThunk("posts/deletePost", async (id) => {
   try {
     const response = await api.deletePost(id);
+    // return the deleted post
+    console.log(response.data);
     return response.data;
   } catch (error) {
     return error.message;

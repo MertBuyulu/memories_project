@@ -39,7 +39,7 @@ const postsSlice = createSlice({
       })
       .addCase(updatePost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.posts.map((post) =>
+        state.posts = state.posts.map((post) =>
           post._id === action.payload._id ? action.payload : post
         );
       })
@@ -52,8 +52,10 @@ const postsSlice = createSlice({
       })
       .addCase(deletePost.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.posts.filter((post) => post._id !== action.payload._id);
-        console.log(state.posts);
+        console.log(action.payload);
+        state.posts = state.posts.filter(
+          (post) => post._id !== action.payload._id
+        );
       })
       .addCase(deletePost.rejected, (state, action) => {
         state.status = "failed";

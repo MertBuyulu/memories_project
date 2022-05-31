@@ -22,7 +22,6 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const post = useSelector((state) => selectPostById(state, currentId));
   const dispatch = useDispatch();
-  console.log(postData.tags);
 
   const classes = useStyles();
 
@@ -50,6 +49,7 @@ const Form = ({ currentId, setCurrentId }) => {
   const clearForm = () => {
     setCurrentId(null);
 
+    console.log(currentId);
     setPostData({
       creator: "",
       title: "",
